@@ -1,6 +1,11 @@
 const express = require("express");
 const app = express();
 const port = 5000;
+const mongoose = require("mongoose");
+
+mongoose
+  .connect("mongodb://localhost:27017/auth")
+  .catch((error) => handleError(error));
 
 app.get("/users", (req, res) => {
   const accounts = [
