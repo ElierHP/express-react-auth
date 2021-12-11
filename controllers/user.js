@@ -1,8 +1,17 @@
-module.exports.userData = (req, res) => {
-  const accounts = [
-    { username: "john", password: "iofmrfm404", id: 0 },
-    { username: "mary", password: "iof21304", id: 1 },
-    { username: "charlie", password: "iof1235404", id: 2 },
-  ];
-  res.json(accounts);
+const User = require("../models/user");
+
+module.exports.userData = async (req, res) => {
+  const users = await User.find({});
+  res.json(users);
+};
+
+module.exports.newUser = (req, res, next) => {
+  const { username, password } = req.body;
+  User.register(new User({ username: username }), password, (err) => {
+    if (err) {
+      console.log("error registering user!", err);
+      return next(err);
+    }
+    res.send("user registered!");
+  });
 };
