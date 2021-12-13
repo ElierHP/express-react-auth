@@ -15,3 +15,7 @@ module.exports.newUser = (req, res, next) => {
     res.send("user registered!");
   });
 };
+
+module.exports.login = (req, res) => {
+  res.send("user has sucessfully logged in!");
+};
