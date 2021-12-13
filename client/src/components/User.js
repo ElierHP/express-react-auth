@@ -1,55 +1,55 @@
-import React, { useState } from "react";
-import { userSchema } from "../validation/userValidation";
+import React from "react";
 import axios from "axios";
+import { useForm } from "react-hook-form";
 
 function Login({ newUser }) {
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleNameChange = (e) => {
-    setName(e.target.value);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = ({ username, password }) => {
+    axios.post("/users/new", {
+      username,
+      password,
+    });
+    window.location.pathname = "/";
   };
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (newUser) {
-      userSchema
-        .validate({ name, password })
-        .then(function (value) {
-          axios.post("/users/new", {
-            username: name,
-            password,
-          });
-          window.location.pathname = "/";
-        })
-        .catch((err) => console.log(err));
-    } else {
-      console.log("Not a new user!");
-    }
-  };
-
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <h1>{newUser ? "Register" : "Login Form"}</h1>
-      <label htmlFor="name">Name:</label>
+      <label htmlFor="username">Username:</label>
       <input
-        type="text"
-        name="name"
-        id="name"
-        value={name}
-        onChange={handleNameChange}
+        id="username"
+        {...register("username", {
+          required: "This field is required",
+          minLength: {
+            value: 3,
+            message: "Must be longer than 3 characters",
+          },
+          maxLength: {
+            value: 20,
+            message: "Must be less than 20 characters.",
+          },
+        })}
       />
+      {errors.username && <span>{errors.username.message}</span>}
       <label htmlFor="password">Password:</label>
       <input
-        type="password"
-        name="password"
         id="password"
-        value={password}
-        onChange={handlePasswordChange}
+        {...register("password", {
+          required: "This field is required",
+          minLength: {
+            value: 6,
+            message: "Must be longer than 6 characters",
+          },
+          maxLength: {
+            value: 30,
+            message: "Must be less than 30 characters.",
+          },
+        })}
       />
+      {errors.password && <span>{errors.password.message}</span>}
       <button type="submit">{newUser ? "Sign Up" : "Login"}</button>
     </form>
   );
