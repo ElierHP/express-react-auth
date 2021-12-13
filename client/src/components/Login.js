@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { schema } from "../validation/userValidation";
+import axios from "axios";
 
 function Login() {
   const [name, setName] = useState("");
@@ -20,7 +21,10 @@ function Login() {
         password,
       })
       .then(function (valid) {
-        console.log({ name, password }, valid);
+        axios.post("/users/new", {
+          username: name,
+          password,
+        });
       });
   };
 
