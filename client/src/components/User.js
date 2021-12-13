@@ -1,13 +1,28 @@
 import React from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
-function Login({ newUser }) {
+const schema = yup
+  .object({
+    username: yup.string().required().min(3).max(30),
+    password: yup.string().required().min(6).max(30),
+    confirmPassword: yup
+      .string()
+      .required("Confirm Password is required")
+      .oneOf([yup.ref("password"), null], "Passwords must match"),
+  })
+  .required();
+
+function User({ newUser }) {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
   const onSubmit = ({ username, password }) => {
     axios.post("/users/new", {
       username,
@@ -19,40 +34,23 @@ function Login({ newUser }) {
     <form onSubmit={handleSubmit(onSubmit)}>
       <h1>{newUser ? "Register" : "Login Form"}</h1>
       <label htmlFor="username">Username:</label>
-      <input
-        id="username"
-        {...register("username", {
-          required: "This field is required",
-          minLength: {
-            value: 3,
-            message: "Must be longer than 3 characters",
-          },
-          maxLength: {
-            value: 20,
-            message: "Must be less than 20 characters.",
-          },
-        })}
-      />
+      <input id="username" {...register("username")} />
       {errors.username && <span>{errors.username.message}</span>}
       <label htmlFor="password">Password:</label>
-      <input
-        id="password"
-        {...register("password", {
-          required: "This field is required",
-          minLength: {
-            value: 6,
-            message: "Must be longer than 6 characters",
-          },
-          maxLength: {
-            value: 30,
-            message: "Must be less than 30 characters.",
-          },
-        })}
-      />
+      <input id="password" {...register("password")} />
       {errors.password && <span>{errors.password.message}</span>}
+      {newUser && (
+        <>
+          <label htmlFor="confirmPassword">Confirm Password:</label>
+          <input id="confirmPassword" {...register("confirmPassword")} />
+          {errors.confirmPassword && (
+            <span>{errors.confirmPassword.message}</span>
+          )}
+        </>
+      )}
       <button type="submit">{newUser ? "Sign Up" : "Login"}</button>
     </form>
   );
 }
 
-export default Login;
+export default User;
