@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import Login from "./components/Login";
+import User from "./components/User";
 import axios from "axios";
+import { Routes, Route, Link } from "react-router-dom";
 
 function App() {
   const [users, setUsers] = useState([]);
@@ -20,7 +21,10 @@ function App() {
           <li key={user._id}>{user.username}</li>
         ))}
       </ul>
-      <Login />
+      <Routes>
+        <Route path="/login" element={<User />} />
+        <Route path="/register" element={<User newUser={true} />} />
+      </Routes>
     </div>
   );
 }

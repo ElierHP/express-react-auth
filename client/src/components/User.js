@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { schema } from "../validation/userValidation";
+import { userSchema } from "../validation/userValidation";
 import axios from "axios";
 
-function Login() {
+function Login({ newUser }) {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
 
@@ -15,22 +15,25 @@ function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    schema
-      .isValid({
-        name,
-        password,
-      })
-      .then(function (valid) {
-        axios.post("/users/new", {
-          username: name,
-          password,
-        });
-      });
+    if (newUser) {
+      userSchema
+        .validate({ name, password })
+        .then(function (value) {
+          axios.post("/users/new", {
+            username: name,
+            password,
+          });
+          window.location.pathname = "/";
+        })
+        .catch((err) => console.log(err));
+    } else {
+      console.log("Not a new user!");
+    }
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <h1>Login Form</h1>
+      <h1>{newUser ? "Register" : "Login Form"}</h1>
       <label htmlFor="name">Name:</label>
       <input
         type="text"
@@ -47,7 +50,7 @@ function Login() {
         value={password}
         onChange={handlePasswordChange}
       />
-      <button type="submit">Sign Up</button>
+      <button type="submit">{newUser ? "Sign Up" : "Login"}</button>
     </form>
   );
 }
