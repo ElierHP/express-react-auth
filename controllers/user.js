@@ -5,15 +5,21 @@ module.exports.userData = async (req, res) => {
   res.json(users);
 };
 
-module.exports.newUser = (req, res, next) => {
+module.exports.newUser = async (req, res, next) => {
   const { username, password } = req.body;
-  User.register(new User({ username: username }), password, (err) => {
+  const user = new User({ username: username });
+  User.register(user, password, (err) => {
     if (err) {
       console.log("error registering user!", err);
       return next(err);
     }
-    res.send(req.body.username);
   });
+  req.login(user, function (err) {
+    if (err) {
+      return next(err);
+    }
+  });
+  res.send(req.user);
 };
 
 module.exports.login = (req, res) => {
