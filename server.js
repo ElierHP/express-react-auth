@@ -8,12 +8,11 @@ const LocalStrategy = require("passport-local");
 const User = require("./models/user");
 const userRoutes = require("./routes/user");
 
+require("dotenv").config();
 const app = express();
 
 // Connect Mongoose
-mongoose
-  .connect("mongodb://localhost:27017/auth")
-  .catch((error) => handleError(error));
+mongoose.connect(process.env.DB_HOST).catch((error) => handleError(error));
 
 // Config
 app.use(express.json());
@@ -21,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   session({
-    secret: "temporary-secret",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: { secure: true },
