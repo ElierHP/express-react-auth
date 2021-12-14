@@ -3,6 +3,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { Link } from "react-router-dom";
 
 const schema = yup
   .object({
@@ -32,19 +33,25 @@ function Register() {
     window.location.pathname = "/";
   };
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <h1>Register</h1>
-      <label htmlFor="username">Username:</label>
-      <input id="username" {...register("username")} />
-      {errors.username && <span>{errors.username.message}</span>}
-      <label htmlFor="password">Password:</label>
-      <input id="password" {...register("password")} />
-      {errors.password && <span>{errors.password.message}</span>}
-      <label htmlFor="confirmPassword">Confirm Password:</label>
-      <input id="confirmPassword" {...register("confirmPassword")} />
-      {errors.confirmPassword && <span>{errors.confirmPassword.message}</span>}
-      <button type="submit">Sign Up</button>
-    </form>
+    <div>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <h1>Register</h1>
+        <label htmlFor="username">Username:</label>
+        <input id="username" {...register("username")} />
+        {errors.username && <span>{errors.username.message}</span>}
+        <label htmlFor="password">Password:</label>
+        <input id="password" {...register("password")} />
+        {errors.password && <span>{errors.password.message}</span>}
+        <label htmlFor="confirmPassword">Confirm Password:</label>
+        <input id="confirmPassword" {...register("confirmPassword")} />
+        {errors.confirmPassword && (
+          <span>{errors.confirmPassword.message}</span>
+        )}
+        <button type="submit">Sign Up</button>
+      </form>
+      <Link to="/login">Login</Link>
+      <Link to="/">User List</Link>
+    </div>
   );
 }
 

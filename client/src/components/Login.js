@@ -3,6 +3,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { Link } from "react-router-dom";
 
 const schema = yup
   .object({
@@ -30,16 +31,20 @@ function Login() {
       .catch((err) => console.log(err));
   };
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <h1>Login Form</h1>
-      <label htmlFor="username">Username:</label>
-      <input id="username" {...register("username")} />
-      {errors.username && <span>{errors.username.message}</span>}
-      <label htmlFor="password">Password:</label>
-      <input id="password" {...register("password")} />
-      {errors.password && <span>{errors.password.message}</span>}
-      <button type="submit">Login</button>
-    </form>
+    <div>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <h1>Login Form</h1>
+        <label htmlFor="username">Username:</label>
+        <input id="username" {...register("username")} />
+        {errors.username && <span>{errors.username.message}</span>}
+        <label htmlFor="password">Password:</label>
+        <input id="password" {...register("password")} />
+        {errors.password && <span>{errors.password.message}</span>}
+        <button type="submit">Login</button>
+      </form>
+      <Link to="/register">New User?</Link>
+      <Link to="/">User List</Link>
+    </div>
   );
 }
 
