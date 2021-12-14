@@ -4,13 +4,19 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-const schema = yup
+const userSchema = yup
+  .object({
+    username: yup.string().required(),
+    password: yup.string().required(),
+  })
+  .required();
+
+const newUserSchema = yup
   .object({
     username: yup.string().required().min(3).max(30),
     password: yup.string().required().min(6).max(30),
     confirmPassword: yup
       .string()
-      .required("Confirm Password is required")
       .oneOf([yup.ref("password"), null], "Passwords must match"),
   })
   .required();
@@ -21,14 +27,24 @@ function User({ newUser }) {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(newUser ? newUserSchema : userSchema),
   });
+
   const onSubmit = ({ username, password }) => {
-    axios.post("/users/new", {
-      username,
-      password,
-    });
-    window.location.pathname = "/";
+    if (newUser) {
+      axios.post("/users/new", {
+        username,
+        password,
+      });
+      window.location.pathname = "/";
+    }
+    axios
+      .post("/users/login", {
+        username,
+        password,
+      })
+      .then(() => (window.location.pathname = "/"))
+      .catch((err) => console.log(err));
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
