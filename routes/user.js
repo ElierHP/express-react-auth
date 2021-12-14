@@ -9,6 +9,6 @@ router.post("/new", users.newUser);
 
 router.post("/login", passport.authenticate("local"), users.login);
 
-router.get("/logout", users.logout);
+router.post("/logout", users.logout);
 
 module.exports = router;

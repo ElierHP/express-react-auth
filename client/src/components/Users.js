@@ -15,6 +15,10 @@ function Users() {
     }
     fetchData();
   }, []);
+
+  const logout = () => {
+    axios.post("/users/logout").then((data) => setCurrentUser(null));
+  };
   return (
     <div>
       <h1>User List</h1>
@@ -32,6 +36,7 @@ function Users() {
       )}
       {!currentUser && <Link to="/login">Login</Link>}
       {!currentUser && <Link to="/register">Register</Link>}
+      {currentUser && <button onClick={logout}>Logout</button>}
     </div>
   );
 }
