@@ -17,5 +17,10 @@ module.exports.newUser = (req, res, next) => {
 };
 
 module.exports.login = (req, res) => {
-  res.send("user has sucessfully logged in!");
+  res.send("user has sucessfully logged in");
+};
+
+module.exports.logout = (req, res) => {
+  req.logout();
+  res.send("user has been logged out.");
 };
