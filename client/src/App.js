@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import User from "./components/User";
+import Login from "./components/Login";
+import Register from "./components/Register";
 import axios from "axios";
 import { Routes, Route } from "react-router-dom";
 
@@ -22,8 +23,8 @@ function App() {
         ))}
       </ul>
       <Routes>
-        <Route path="/login" element={<User />} />
-        <Route path="/register" element={<User newUser={true} />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </div>
   );
