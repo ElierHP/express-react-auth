@@ -12,12 +12,12 @@ module.exports.newUser = (req, res, next) => {
       console.log("error registering user!", err);
       return next(err);
     }
-    res.send("user registered!");
+    res.send(req.body.username);
   });
 };
 
 module.exports.login = (req, res) => {
-  res.send("user has sucessfully logged in");
+  res.send(req.body.username);
 };
 
 module.exports.logout = (req, res) => {
