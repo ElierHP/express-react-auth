@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import { UserContext } from "../context/UserProvider";
 
 const schema = yup
   .object({
@@ -17,6 +18,8 @@ const schema = yup
   .required();
 
 function Register() {
+  const [currentUser, setCurrentUser] = useContext(UserContext);
+
   const {
     register,
     handleSubmit,
@@ -26,11 +29,12 @@ function Register() {
   });
 
   const onSubmit = ({ username, password }) => {
-    axios.post("/users/new", {
-      username,
-      password,
-    });
-    window.location.pathname = "/";
+    axios
+      .post("/users/new", {
+        username,
+        password,
+      })
+      .then((res) => setCurrentUser(res.data.username));
   };
 
   return (
@@ -52,6 +56,7 @@ function Register() {
       </form>
       <Link to="/login">Login</Link>
       <Link to="/">User List</Link>
+      {currentUser && <Navigate to="/" />}
     </div>
   );
 }
