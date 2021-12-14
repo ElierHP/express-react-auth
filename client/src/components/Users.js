@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { UserContext } from "../context/UserProvider";
 
 function Users() {
+  const [currentUser, setCurrentUser] = useContext(UserContext);
   const [users, setUsers] = useState([]);
+
   useEffect(() => {
     async function fetchData() {
       await axios.get("/users").then((res) => {
@@ -12,6 +15,7 @@ function Users() {
     }
     fetchData();
   }, []);
+  console.log(currentUser);
   return (
     <div>
       <h1>User List</h1>
@@ -20,8 +24,15 @@ function Users() {
           <li key={user._id}>{user.username}</li>
         ))}
       </ul>
-      <Link to="/login">Login</Link>
-      <Link to="/register">Register</Link>
+      {currentUser ? (
+        <p>
+          Currently logged in as: <b>{currentUser}</b>{" "}
+        </p>
+      ) : (
+        <p>Currently not logged in.</p>
+      )}
+      {!currentUser && <Link to="/login">Login</Link>}
+      {!currentUser && <Link to="/register">Register</Link>}
     </div>
   );
 }

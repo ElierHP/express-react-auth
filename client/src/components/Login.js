@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import { UserContext } from "../context/UserProvider";
 
 const schema = yup
   .object({
@@ -13,6 +14,8 @@ const schema = yup
   .required();
 
 function Login() {
+  const [currentUser, setCurrentUser] = useContext(UserContext);
+
   const {
     register,
     handleSubmit,
@@ -27,7 +30,9 @@ function Login() {
         username,
         password,
       })
-      .then(() => (window.location.pathname = "/"))
+      .then(() => {
+        setCurrentUser(username);
+      })
       .catch((err) => console.log(err));
   };
   return (
@@ -44,6 +49,7 @@ function Login() {
       </form>
       <Link to="/register">New User?</Link>
       <Link to="/">User List</Link>
+      {currentUser && <Navigate to="/" />}
     </div>
   );
 }

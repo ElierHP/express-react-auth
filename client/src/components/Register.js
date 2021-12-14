@@ -32,6 +32,7 @@ function Register() {
     });
     window.location.pathname = "/";
   };
+
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
