@@ -30,8 +30,8 @@ function Login() {
         username,
         password,
       })
-      .then(() => {
-        setCurrentUser(username);
+      .then((res) => {
+        setCurrentUser(res.data);
       })
       .catch((err) => console.log(err));
   };
