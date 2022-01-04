@@ -14,7 +14,8 @@ const schema = yup
   .required();
 
 function Login() {
-  const [currentUser, setCurrentUser] = useContext(UserContext);
+  const [user, setUser, isLoading, setIsLoading, isError, setIsError] =
+    useContext(UserContext);
 
   const {
     register,
@@ -24,17 +25,23 @@ function Login() {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = ({ username, password }) => {
-    axios
-      .post("/users/login", {
+  const onSubmit = async ({ username, password }) => {
+    try {
+      setIsLoading(true);
+      setIsError(false);
+      const res = await axios.post("/users/login", {
         username,
         password,
-      })
-      .then((res) => {
-        setCurrentUser(res.data);
-      })
-      .catch((err) => console.log(err));
+      });
+      setUser({ user: res.data.user, isLoggedIn: res.data.isLoggedIn });
+    } catch (error) {
+      setIsError(true);
+    }
+    setIsLoading(false);
   };
+
+  if (isError) return <h1>Error, try again!</h1>;
+  if (isLoading) return <h1>Loading...</h1>;
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -49,7 +56,7 @@ function Login() {
       </form>
       <Link to="/register">New User?</Link>
       <Link to="/">User List</Link>
-      {currentUser && <Navigate to="/" />}
+      {user && <Navigate to="/" />}
     </div>
   );
 }

@@ -1,11 +1,17 @@
-import React, { useState, createContext } from "react";
+import React, { useState, createContext, useEffect } from "react";
+import axios from "axios";
 
 export const UserContext = createContext();
 
 function UserProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [user, setUser] = useState(null);
+
   return (
-    <UserContext.Provider value={[currentUser, setCurrentUser]}>
+    <UserContext.Provider
+      value={[user, setUser, isLoading, setIsLoading, isError, setIsError]}
+    >
       {children}
     </UserContext.Provider>
   );

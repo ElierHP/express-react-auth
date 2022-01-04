@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import { UserContext } from "../context/UserProvider";
 
 function Users() {
-  const [currentUser, setCurrentUser] = useContext(UserContext);
+  const [user, setUser, isLoading, setIsLoading, isError, setIsError] =
+    useContext(UserContext);
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -17,7 +18,7 @@ function Users() {
   }, []);
 
   const logout = () => {
-    axios.post("/users/logout").then((data) => setCurrentUser(null));
+    axios.post("/users/logout").then((data) => setUser(null));
   };
   return (
     <div>
@@ -27,16 +28,10 @@ function Users() {
           <li key={user._id}>{user.username}</li>
         ))}
       </ul>
-      {currentUser ? (
-        <p>
-          Currently logged in as: <b>{currentUser}</b>{" "}
-        </p>
-      ) : (
-        <p>Currently not logged in.</p>
-      )}
-      {!currentUser && <Link to="/login">Login</Link>}
-      {!currentUser && <Link to="/register">Register</Link>}
-      {currentUser && <button onClick={logout}>Logout</button>}
+      {user && <p>Currently logged in: {user.user.username}</p>}
+      {!user && <Link to="/login">Login</Link>}
+      {!user && <Link to="/register">Register</Link>}
+      {user && <button onClick={logout}>Logout</button>}
     </div>
   );
 }
