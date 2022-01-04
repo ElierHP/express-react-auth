@@ -20,6 +20,7 @@ function Users() {
   const logout = () => {
     axios.post("/users/logout").then((data) => setUser(null));
   };
+
   return (
     <div>
       <h1>User List</h1>

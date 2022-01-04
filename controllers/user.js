@@ -23,7 +23,7 @@ module.exports.newUser = async (req, res, next) => {
 };
 
 module.exports.login = (req, res) => {
-  res.send(req.body.username);
+  res.send({ user: req.user, isLoggedIn: "true" });
 };
 
 module.exports.logout = (req, res) => {
