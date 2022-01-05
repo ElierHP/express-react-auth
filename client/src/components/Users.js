@@ -1,39 +1,38 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { UserContext } from "../context/UserProvider";
 
 function Users() {
   const [user, setUser, isLoading, setIsLoading, isError, setIsError] =
     useContext(UserContext);
-  const [users, setUsers] = useState([]);
 
-  useEffect(() => {
-    async function fetchData() {
-      await axios.get("/users").then((res) => {
-        setUsers(res.data);
-      });
+  const logout = async () => {
+    try {
+      setIsLoading(true);
+      setIsError(false);
+      axios.post("/users/logout").then((data) => setUser(null));
+    } catch (error) {
+      setIsError(true);
     }
-    fetchData();
-  }, []);
-
-  const logout = () => {
-    axios.post("/users/logout").then((data) => setUser(null));
+    setIsLoading(false);
   };
 
+  if (isError) return <h1>Error, try again!</h1>;
+  if (isLoading) return <h1>Loading...</h1>;
   return (
-    <div>
-      <h1>User List</h1>
-      <ul>
-        {users.map((user) => (
-          <li key={user._id}>{user.username}</li>
-        ))}
-      </ul>
-      {user && <p>Currently logged in: {user.user.username}</p>}
-      {!user && <Link to="/login">Login</Link>}
-      {!user && <Link to="/register">Register</Link>}
-      {user && <button onClick={logout}>Logout</button>}
-    </div>
+    <>
+      {user ? (
+        <div>
+          <h1>User Route</h1>
+          <p>This is a protected route.</p>
+          <p>Currently logged in as: {user.user.username}</p>
+          <button onClick={logout}>Logout</button>
+        </div>
+      ) : (
+        <Navigate to="/login" />
+      )}
+    </>
   );
 }
 

@@ -29,15 +29,19 @@ function Register() {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = ({ username, password }) => {
-    axios
-      .post("/users/new", {
+  const onSubmit = async ({ username, password }) => {
+    try {
+      setIsLoading(true);
+      setIsError(false);
+      const res = await axios.post("/users/new", {
         username,
         password,
-      })
-      .then((res) =>
-        setUser({ user: res.data.user, isLoggedIn: res.data.isLoggedIn })
-      );
+      });
+      setUser({ user: res.data.user, isLoggedIn: res.data.isLoggedIn });
+    } catch (error) {
+      setIsError(true);
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -58,7 +62,7 @@ function Register() {
         <button type="submit">Sign Up</button>
       </form>
       <Link to="/login">Login</Link>
-      <Link to="/">User List</Link>
+      <Link to="/">User Route</Link>
       {user && <Navigate to="/" />}
     </div>
   );

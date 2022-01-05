@@ -55,7 +55,7 @@ function Login() {
         <button type="submit">Login</button>
       </form>
       <Link to="/register">New User?</Link>
-      <Link to="/">User List</Link>
+      <Link to="/">User Route</Link>
       {user && <Navigate to="/" />}
     </div>
   );
