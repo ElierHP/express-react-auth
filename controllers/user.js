@@ -1,8 +1,11 @@
 const User = require("../models/user");
 
 module.exports.userData = async (req, res) => {
-  const users = await User.find({});
-  res.json(users);
+  if (req.user) {
+    res.send({ user: req.user, isLoggedIn: "true" });
+  } else {
+    res.send({ isLoggedIn: "false" });
+  }
 };
 
 module.exports.newUser = async (req, res, next) => {
@@ -28,5 +31,5 @@ module.exports.login = (req, res) => {
 
 module.exports.logout = (req, res) => {
   req.logout();
-  res.send("user has been logged out.");
+  res.send({ isLoggedIn: "false" });
 };
