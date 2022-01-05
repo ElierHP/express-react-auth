@@ -11,7 +11,8 @@ function Users() {
     try {
       setIsLoading(true);
       setIsError(false);
-      axios.post("/users/logout").then((data) => setUser(null));
+      const res = await axios.post("/users/logout");
+      setUser(res.data.isLoggedIn);
     } catch (error) {
       setIsError(true);
     }
@@ -22,7 +23,7 @@ function Users() {
   if (isLoading) return <h1>Loading...</h1>;
   return (
     <>
-      {user ? (
+      {user.isLoggedIn === "true" ? (
         <div>
           <h1>User Route</h1>
           <p>This is a protected route.</p>

@@ -40,6 +40,7 @@ function Login() {
     setIsLoading(false);
   };
 
+  console.log(user);
   if (isError) return <h1>Error, try again!</h1>;
   if (isLoading) return <h1>Loading...</h1>;
   return (
@@ -56,7 +57,7 @@ function Login() {
       </form>
       <Link to="/register">New User?</Link>
       <Link to="/">User Route</Link>
-      {user && <Navigate to="/" />}
+      {user.isLoggedIn === "true" && <Navigate to="/" />}
     </div>
   );
 }

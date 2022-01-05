@@ -44,6 +44,8 @@ function Register() {
     setIsLoading(false);
   };
 
+  if (isError) return <h1>Error, try again!</h1>;
+  if (isLoading) return <h1>Loading...</h1>;
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -63,7 +65,7 @@ function Register() {
       </form>
       <Link to="/login">Login</Link>
       <Link to="/">User Route</Link>
-      {user && <Navigate to="/" />}
+      {!user.isLoggedIn && <Navigate to="/" />}
     </div>
   );
 }
