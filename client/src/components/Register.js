@@ -18,8 +18,16 @@ const schema = yup
   .required();
 
 function Register() {
-  const [user, setUser, isLoading, setIsLoading, isError, setIsError] =
-    useContext(UserContext);
+  const [
+    user,
+    setUser,
+    isLoggedIn,
+    setIsLoggedIn,
+    isLoading,
+    setIsLoading,
+    isError,
+    setIsError,
+  ] = useContext(UserContext);
 
   const {
     register,
@@ -37,7 +45,12 @@ function Register() {
         username,
         password,
       });
-      setUser({ user: res.data.user, isLoggedIn: res.data.isLoggedIn });
+      if (res.data.isLoggedIn === true) {
+        setUser({ username: res.data.user.username });
+        setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(res.data.isLoggedIn);
+      }
     } catch (error) {
       setIsError(true);
     }
@@ -65,7 +78,7 @@ function Register() {
       </form>
       <Link to="/login">Login</Link>
       <Link to="/">User Route</Link>
-      {!user.isLoggedIn && <Navigate to="/" />}
+      {isLoggedIn && <Navigate to="/" />}
     </div>
   );
 }

@@ -2,9 +2,9 @@ const User = require("../models/user");
 
 module.exports.userData = async (req, res) => {
   if (req.user) {
-    res.send({ user: req.user, isLoggedIn: "true" });
+    res.send({ user: req.user, isLoggedIn: true });
   } else {
-    res.send({ isLoggedIn: "false" });
+    res.send({ isLoggedIn: false });
   }
 };
 
@@ -22,14 +22,16 @@ module.exports.newUser = async (req, res, next) => {
       return next(err);
     }
   });
-  res.send(req.user);
+  req.session.isLoggedIn = true;
+  res.send({ user: req.user, isLoggedIn: req.session.isLoggedIn });
 };
 
 module.exports.login = (req, res) => {
-  res.send({ user: req.user, isLoggedIn: "true" });
+  req.session.isLoggedIn = true;
+  res.send({ user: req.user, isLoggedIn: req.session.isLoggedIn });
 };
 
 module.exports.logout = (req, res) => {
   req.logout();
-  res.send({ isLoggedIn: "false" });
+  res.send({ isLoggedIn: false });
 };
