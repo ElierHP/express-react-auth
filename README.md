@@ -1,3 +1,2 @@
-# auth
-
-User authentication &amp; authorization using Express and React.
+# Express & React Auth
+User authentication &amp; authorization using Express, React & Passport.
